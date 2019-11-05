@@ -1,0 +1,6 @@
+yolov3.weights
+model.h5
+model.json
+.idea
+venv
+detected.jpg
