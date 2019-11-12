@@ -5,7 +5,7 @@ from . import draw_boxes as db
 INPUT_W, INPUT_H = 416, 416
 
 
-def inference_single(model, image):
+def inference_single(model, image, thresh):
     new_image = bound_box.preprocess_input(image, INPUT_W, INPUT_H)
     y_hat = model.predict(new_image)
-    return db(image, y_hat)
+    return db(image, y_hat, obj_thresh=thresh)

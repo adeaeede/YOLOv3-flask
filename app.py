@@ -28,13 +28,20 @@ _model = init_model()
 def inference_single():
     if request.content_length > 4194304:
         return make_response(('Exceeded maximal content size', 413))
-    imageString = base64.b64decode(request.json['image'])
-    nparr = np.fromstring(imageString, np.uint8)
-    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    probabilities, image = inference.inference_single(_model, image)
-    _, img_encoded = cv2.imencode('.jpg', image)
-    return send_file(io.BytesIO(img_encoded), as_attachment=True, attachment_filename='image_detected.jpg',
-                     mimetype='image/jpg')
+    try:
+        imageString = base64.b64decode(request.json['image'])
+        thresh = request.json['obj_thresh']
+        nparr = np.fromstring(imageString, np.uint8)
+        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        probabilities, image = inference.inference_single(_model, image, thresh)
+        _, img_encoded = cv2.imencode('.jpg', image)
+        return send_file(io.BytesIO(img_encoded), as_attachment=True, attachment_filename='image_detected.jpg',
+                         mimetype='image/jpg')
+    except KeyError as e:
+        return make_response(('There is something wrong with the payload.', 400))
+    except ValueError as e:
+        return make_response(('There is something wrong with the payload.', 400))
+    return make_response(('Something went wrong.', 500))
 
 
 if __name__ == '__main__':
