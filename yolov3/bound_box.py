@@ -1,11 +1,4 @@
 import numpy as np
-from numpy import expand_dims
-from keras.preprocessing.image import load_img
-from keras.preprocessing.image import img_to_array
-from matplotlib import pyplot
-from matplotlib.patches import Rectangle
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
 import cv2
 
 
@@ -182,19 +175,20 @@ def preprocess_input(image, net_h, net_w):
     new_h, new_w, _ = image.shape
 
     # determine the new size of the image
-    if (float(net_w)/new_w) < (float(net_h)/new_h):
-        new_h = (new_h * net_w)/new_w
+    if (float(net_w) / new_w) < (float(net_h) / new_h):
+        new_h = np.ceil((new_h * net_w) / new_w)
         new_w = net_w
     else:
-        new_w = (new_w * net_h)/new_h
+        new_w = np.ceil((new_w * net_h) / new_h)
         new_h = net_h
 
-    # resize the image to the new sizea
-    resized = cv2.resize(image[:,:,::-1]/255., (int(new_w), int(new_h)))
+    # resize the image to the new size
+    resized = cv2.resize(image[:, :, ::-1] / 255., (int(new_w), int(new_h)))
 
     # embed the image into the standard letter box
     new_image = np.ones((net_h, net_w, 3)) * 0.5
-    new_image[int((net_h-new_h)//2):int((net_h+new_h)//2)-1, int((net_w-new_w)//2):int((net_w+new_w)//2), :] = resized
+    new_image[int((net_h - new_h) // 2):int((net_h + new_h) // 2),
+    int((net_w - new_w) // 2):int((net_w + new_w) // 2), :] = resized
     new_image = np.expand_dims(new_image, 0)
 
     return new_image

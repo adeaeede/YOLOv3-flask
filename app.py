@@ -33,7 +33,6 @@ def inference_single():
     image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     probabilities, image = inference.inference_single(_model, image)
     _, img_encoded = cv2.imencode('.jpg', image)
-    # Something does not work quite with broadcasting see line 197 in bound_box.py
     return send_file(io.BytesIO(img_encoded), as_attachment=True, attachment_filename='image_detected.jpg',
                      mimetype='image/jpg')
 
