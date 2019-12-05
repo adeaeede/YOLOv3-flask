@@ -1,0 +1,155 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Try out the capacities of yoloV3 in object detection. Send a request to an recognition endpoint with a base64 encoded image. You can use the provided encoder endpoint for conversion",
+    "version": "1.0.0",
+    "title": "YOLOV3 - object detection API",
+    "contact": {
+      "email": "adrian.gruszczynski@bosch-si.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Object detection",
+      "description": "Use the provided endpoints for classification or image detection with bounding boxes. Sky is the limit!"
+    },
+    {
+      "name": "Classification",
+      "description": "Get classes probabilities for objects detected in your image."
+    },
+    {
+      "name": "Image pre-processing",
+      "description": "Encode images in base64 format to use with the API."
+    }
+  ],
+  "paths": {
+    "/api/v1/boxes/": {
+      "post": {
+        "tags": [
+          "Object detection"
+        ],
+        "summary": "Submit an image for object detection.",
+        "requestBody": {
+          "summary": "Performs object detection on the image by drawing bounding boxes around detected classes.",
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "produces": [
+          "image/jpg"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Exceeded maximal content size."
+          },
+          "413": {
+            "description": "Payload does not comply the specification."
+          }
+        }
+      }
+    },
+    "/api/v1/classify/": {
+      "post": {
+        "tags": [
+          "Classification"
+        ],
+        "summary": "Submit an image for classification.",
+        "requestBody": {
+          "summary": "Returns classes and corresponding probabilities for objects detected in the provided image.",
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Exceeded maximal content size."
+          },
+          "413": {
+            "description": "Payload does not comply the specification."
+          }
+        }
+      }
+    },
+    "/api/v1/encode": {
+      "post": {
+        "tags": [
+          "Image pre-processing"
+        ],
+        "summary": "Encode an image into Base64.",
+        "requestBody": {
+          "summary": "Submit photo for a Base64 encoded representation for object detection.",
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "produces": [
+          "image/jpg"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Exceeded maximal content size."
+          },
+          "413": {
+            "description": "Payload does not comply the specification."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "boxes": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "image",
+            "format": "Base64 encoded image."
+          },
+          "obj_threshold": {
+            "type": "number",
+            "format": "Only draw boxes to classes detected with probability above the given threshold."
+          }
+        }
+      }
+    }
+  }
+}

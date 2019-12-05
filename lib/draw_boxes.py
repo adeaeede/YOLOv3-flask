@@ -13,7 +13,7 @@ labels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", 
           "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
 
 
-def draw_boxes(image, yhat, obj_thresh=.5, nms_thresh=.45):
+def draw_boxes(image, yhat, obj_thresh, nms_thresh=.45):
     input_w, input_h = 416, 416
     image_h, image_w, _ = image.shape
 
@@ -23,16 +23,15 @@ def draw_boxes(image, yhat, obj_thresh=.5, nms_thresh=.45):
         boxes += bound_box.decode_netout(yhat[i][0], anchors[i], obj_thresh, nms_thresh, input_h, input_w)
     bound_box.correct_yolo_boxes(boxes, image_h, image_w, input_h, input_w)
     bound_box.do_nms(boxes, nms_thresh)
-    probabilities = get_labels(boxes)
+    probabilities = get_labels(boxes, obj_thresh)
     image = bound_box.draw_boxes(image, boxes, labels, obj_thresh)
     return probabilities, image
 
 
-def get_labels(boxes, obj_thresh=.5, nms_thresh=.45):
-    output = dict()
+def get_labels(boxes, obj_thresh, nms_thresh=.45):
+    classes = list()
     for box in boxes:
         for i in range(len(labels)):
             if box.classes[i] > obj_thresh:
-                output[str(labels[i])] = str(box.classes[i] * 100) + '%'
-                print(labels[i] + ': ' + str(box.classes[i] * 100) + '%')
-    return output
+                classes.append(f'{labels[i]}: {str(box.classes[i] * 100)}%')
+    return classes

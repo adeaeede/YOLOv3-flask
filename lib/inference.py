@@ -1,5 +1,5 @@
-from yolov3 import bound_box
-from . import draw_boxes as db
+from lib import bound_box
+from lib.draw_boxes import draw_boxes as db
 
 # define the expected input shape for the model
 INPUT_W, INPUT_H = 416, 416
