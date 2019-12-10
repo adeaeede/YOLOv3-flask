@@ -1,4 +1,4 @@
-# Object detection API using YOLOv3
+# Object detection API using YOLOv3, Flask and Swagger
 
 ## About
 This project uses a pre-trained yoloV3 object detection model on the COCO dataset.
