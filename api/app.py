@@ -98,4 +98,4 @@ def encode():
 
 
 if __name__ == '__main__':
-    application.run(debug=False, threaded=False, host='0.0.0.0', port='80')
+    application.run(debug=False, threaded=False, host='localhost', port='8080')
