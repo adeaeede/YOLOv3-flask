@@ -19,18 +19,18 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
     }
 )
 
-app = Flask(__name__)
-app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+application = Flask(__name__)
+application.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 
 def init_model():
     # load json and create model
-    json_file = open('model.json', 'r')
+    json_file = open('static/model.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     model = model_from_json(loaded_model_json)
     # load weights into new model
-    model.load_weights("model.h5")
+    model.load_weights("static/model.h5")
     print("Loaded model from disk")
     return model
 
@@ -44,7 +44,7 @@ def encode_image(_bytes):
     return cv2.imdecode(ndarray, cv2.IMREAD_COLOR)
 
 
-@app.route('/api/v1/boxes/', methods=['POST'])
+@application.route('/api/v1/boxes/', methods=['POST'])
 def boxes():
     if request.content_length > 4194304:
         return Response(json.dumps({'error': 'Exceeded maximal content size'}), status=413,
@@ -66,7 +66,7 @@ def boxes():
                     mimetype='application/json')
 
 
-@app.route('/api/v1/classify/', methods=['POST'])
+@application.route('/api/v1/classify/', methods=['POST'])
 def classify():
     if request.content_length > 4194304:
         return Response(json.dumps({'error': 'Exceeded maximal content size'}), status=413,
@@ -84,7 +84,7 @@ def classify():
                         mimetype='application/json')
 
 
-@app.route('/api/v1/encode', methods=['POST'])
+@application.route('/api/v1/encode', methods=['POST'])
 def encode():
     if str(request.content_type) != 'application/octet-stream':
         return Response(json.dumps({'error': 'Unsupported content type. Try using content-type: image/png '}),
@@ -98,4 +98,4 @@ def encode():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, threaded=False)
+    application.run(debug=False, threaded=False, host='0.0.0.0', port='80')
