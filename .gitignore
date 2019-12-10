@@ -4,3 +4,5 @@ model.json
 .idea
 venv
 detected.jpg
+__pycache__/
+yolov3_flask.egg-info/
