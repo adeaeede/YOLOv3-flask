@@ -9,9 +9,9 @@ Official yoloV3 website:
 https://pjreddie.com/darknet/yolo/
 
 ## Build and run in production
-Use ``docker build --tag yolov3-object-detection .`` in the project directory to build the docker image.
+Use ``docker build --tag yolov3 .`` in the project directory to build the docker image.
 It will fetch and install the necessary dependencies inside the docker container.
-Next, run the image using ``docker run -p 80:8000 yolo_deploy``
+Next, run the image using ``docker run -p 80:8000 yolov3``
 The Swagger UI is accessible under ``localhost/ui``.
 Fell free to use some of the example images from the `images` directory.
 
