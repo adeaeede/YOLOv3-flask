@@ -42,7 +42,7 @@ six==1.12.0
 tensorflow==1.14.0
 tensorflow-estimator==1.14.0
 termcolor==1.1.0
-urllib3==1.25.6
+urllib3==1.25.8
 Werkzeug==0.16.0
 wrapt==1.11.2
 -e git+https://github.com/adeaeede/YOLOv3-flask.git@35244ac67a9c185b2b003ff4a724cef142a93784#egg=yolov3_flask
